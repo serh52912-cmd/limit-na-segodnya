@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f7f4">
+<title>Лимит на сегодня — личный бюджет</title>
+<style>
+:root{--bg:#f5f7f4;--panel:#fff;--ink:#18251f;--muted:#7a8981;--line:#e7ece7;--green:#247b5b;--green2:#e7f3ec;--lime:#dff28a;--orange:#f1a65b;--red:#d86b64;--shadow:0 12px 35px rgba(26,54,40,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}.app{max-width:1240px;margin:auto;padding:24px;display:grid;grid-template-columns:240px 1fr;gap:26px;min-height:100vh}
+.sidebar{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px 14px;display:flex;flex-direction:column;height:calc(100vh - 48px);position:sticky;top:24px}
+.brand{display:flex;align-items:center;gap:11px;padding:4px 9px 28px}.brandmark{width:38px;height:38px;border-radius:13px;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800;font-size:20px}.brand strong{display:block;font-size:16px;letter-spacing:-.4px}.brand small{color:var(--muted);font-size:11px}
+.navlabel{font-size:10px;letter-spacing:1.4px;color:#a0aaa3;font-weight:800;padding:8px 12px}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;text-align:left;color:#66756c;padding:12px;border-radius:12px;display:flex;align-items:center;gap:12px;font-weight:600}.nav button:hover{background:#f6f8f6}.nav button.active{background:var(--green2);color:var(--green)}.nav .ico{width:20px;text-align:center;font-size:17px}.sidebottom{margin-top:auto;background:#f6f8f5;border-radius:16px;padding:14px;color:#64736a;font-size:12px}.sidebottom b{display:block;color:var(--ink);font-size:13px;margin-bottom:4px}
+main{min-width:0}.topbar{display:flex;justify-content:space-between;align-items:center;margin:3px 0 25px;gap:16px}.eyebrow{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1.3px;text-transform:uppercase}.topbar h1{font-size:27px;letter-spacing:-1px;margin:3px 0 0}.today{color:var(--muted);font-size:13px}.avatar{width:42px;height:42px;border-radius:50%;background:#e5eee7;color:var(--green);display:grid;place-items:center;font-weight:800}
+.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:1.35fr 1fr;gap:18px}.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow);min-width:0}.hero{background:#1e634b;color:white;border:0;position:relative;overflow:hidden;padding:26px}.hero:after{content:"";position:absolute;width:230px;height:230px;border:1px solid rgba(255,255,255,.13);border-radius:50%;right:-50px;top:-95px;box-shadow:0 0 0 24px rgba(255,255,255,.035),0 0 0 50px rgba(255,255,255,.025)}.hero .eyebrow{color:#c3ddce}.hero h2{font-size:15px;font-weight:600;margin:14px 0 2px;color:#d8e9df}.amount{font-size:48px;font-weight:800;letter-spacing:-2px;line-height:1.2}.hero p{color:#c3ddce;font-size:13px;margin:10px 0 20px}.hero-foot{display:flex;gap:22px;flex-wrap:wrap}.hero-foot span{font-size:12px;color:#d1e5d9}.hero-foot b{display:block;color:white;font-size:15px;margin-top:2px}.hero-actions{display:flex;gap:9px;position:relative;z-index:1}.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:700;background:var(--green);color:#fff}.btn:hover{filter:brightness(.96)}.btn.light{background:#fff;color:var(--green)}.btn.soft{background:var(--green2);color:var(--green)}.btn.outline{background:#fff;border:1px solid var(--line);color:var(--ink)}.btn.danger{background:#fff0ef;color:var(--red)}.btn.small{padding:8px 11px;font-size:12px}
+.cardhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.cardhead h3{margin:0;font-size:16px;letter-spacing:-.3px}.muted{color:var(--muted)}.smalltext{font-size:12px;color:var(--muted)}.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}.stat{background:#fff;border:1px solid var(--line);border-radius:17px;padding:17px}.stat .label{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:20px;letter-spacing:-.5px;margin:5px 0}.stat em{font-style:normal;font-size:11px;color:var(--green)}
+.progress{height:9px;background:#edf1ed;border-radius:20px;overflow:hidden}.progress span{display:block;height:100%;background:var(--green);border-radius:20px;width:0;transition:width .25s}.progress.orange span{background:var(--orange)}
+.field{display:grid;gap:6px;margin-bottom:14px}.field label{font-size:12px;font-weight:700;color:#526158}.field input,.field select{width:100%;border:1px solid #dfe7df;border-radius:11px;padding:12px 13px;background:#fbfcfb;color:var(--ink);outline:none}.field input:focus,.field select:focus{border-color:#6aa88a;box-shadow:0 0 0 3px #e6f2eb}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.hint{background:#f5f8f4;border-radius:12px;padding:12px;color:#6c7b70;font-size:12px}
+.activity{display:grid;gap:0}.activityrow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.activityrow:last-child{border:0}.dot{width:38px;height:38px;border-radius:12px;background:#f0f5f0;display:grid;place-items:center;font-size:17px}.activityrow .desc{flex:1;min-width:0}.activityrow b{display:block;font-size:13px}.activityrow small{color:var(--muted);font-size:11px}.activityrow strong{font-size:13px;white-space:nowrap}.empty{padding:24px;text-align:center;color:var(--muted);font-size:13px}
+.barlist{display:grid;gap:14px}.barline{display:grid;grid-template-columns:90px 1fr 75px;align-items:center;gap:10px;font-size:12px}.bartrack{height:9px;background:#edf1ed;border-radius:20px;overflow:hidden}.bartrack span{display:block;height:100%;background:#83b79a;border-radius:20px}
+.goal{border:1px solid var(--line);border-radius:15px;padding:15px;margin-bottom:11px}.goalhead{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px}.goalhead b{font-size:14px}.goalhead strong{font-size:13px}.goalfoot{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted)}
+.tip{border-radius:15px;background:#f3f7e9;padding:16px;color:#53633b;font-size:13px}.tip b{display:block;color:#33451e;margin-bottom:5px}
+.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;color:var(--muted);font-size:11px;font-weight:700;padding:10px;border-bottom:1px solid var(--line)}td{padding:13px 10px;border-bottom:1px solid var(--line)}.pill{font-size:10px;border-radius:20px;background:#edf5ef;color:var(--green);padding:4px 8px;font-weight:700}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#20372b;color:white;padding:12px 18px;border-radius:12px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.2s;z-index:10}.toast.show{opacity:1}
+.mobilebar{display:none}
+@media(max-width:850px){.app{grid-template-columns:1fr;padding:14px;gap:14px}.sidebar{display:none}.mobilebar{display:flex;position:fixed;bottom:10px;left:10px;right:10px;background:#fff;border:1px solid var(--line);border-radius:17px;padding:7px;justify-content:space-around;z-index:5;box-shadow:0 8px 28px #1a36201a}.mobilebar button{border:0;background:transparent;color:#738077;font-size:10px;padding:7px 8px;border-radius:10px;display:grid;gap:3px;justify-items:center}.mobilebar button.active{background:var(--green2);color:var(--green)}.mobilebar span{font-size:17px}.app{padding-bottom:85px}.grid{grid-template-columns:1fr}.topbar{margin-bottom:17px}.topbar h1{font-size:23px}.statrow{gap:8px}.stat{padding:13px}.stat strong{font-size:16px}.amount{font-size:40px}}
+@media(max-width:420px){.formgrid{grid-template-columns:1fr}.hero{padding:21px}.hero-foot{gap:14px}.barline{grid-template-columns:72px 1fr 65px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+ <div class="brand"><div class="brandmark">₸</div><div><strong>Лимит на сегодня</strong><small>умный личный бюджет</small></div></div>
+ <div class="navlabel">МЕНЮ</div>
+ <nav class="nav">
+  <button class="active" data-page="home"><span class="ico">⌂</span>Обзор</button>
+  <button data-page="expenses"><span class="ico">↗</span>Расходы</button>
+  <button data-page="goals"><span class="ico">◎</span>Цели накопления</button>
+  <button data-page="insights"><span class="ico">▥</span>Аналитика</button>
+  <button data-page="settings"><span class="ico">⚙</span>Настройки</button>
+ </nav>
+ <div class="sidebottom"><b>Небольшой совет</b>Сначала отложи деньги на обязательные платежи и цель, а потом планируй ежедневные траты.</div>
+</aside>
+<main>
+ <header class="topbar"><div><div class="eyebrow">ТВОИ ФИНАНСЫ ПРОЩЕ</div><h1 id="pageTitle">Обзор</h1><div class="today" id="today"></div></div><div class="avatar">₸</div></header>
+
+<section class="page active" id="home">
+ <div class="grid">
+  <div class="card hero">
+   <div class="eyebrow">ТВОЙ БЕЗОПАСНЫЙ ЛИМИТ</div>
+   <h2>Сегодня можно потратить</h2>
+   <div class="amount" id="dailyLimit">0 ₸</div>
+   <p id="limitMessage">Заполни данные бюджета, чтобы рассчитать дневной лимит.</p>
+   <div class="hero-actions"><button class="btn light" onclick="go('settings')">Настроить бюджет</button><button class="btn" style="background:#398365" onclick="go('expenses')">+ Расход</button></div>
+   <div class="hero-foot" style="margin-top:20px"><span>Дней до дохода<b id="daysLeft">—</b></span><span>Остаток после резервов<b id="available">—</b></span><span>Потрачено сегодня<b id="spentToday">0 ₸</b></span></div>
+  </div>
+  <div class="card">
+   <div class="cardhead"><h3>Прогресс на сегодня</h3><span class="smalltext" id="progressPct">0%</span></div>
+   <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px"><span class="muted">Потрачено</span><b id="progressSpent">0 ₸</b></div>
+   <div class="progress"><span id="progressBar"></span></div>
+   <p class="smalltext" id="progressNote" style="margin-top:12px">Добавляй расходы — здесь появится твой прогресс.</p>
+   <div class="divider"></div>
+   <div class="tip" style="margin-top:18px"><b>💡 Умная подсказка</b><span id="dailyTip">Планируй траты исходя из суммы, которая останется после обязательных платежей.</span></div>
+  </div>
+ </div>
+ <div class="statrow">
+  <div class="stat"><div class="label">Текущий баланс</div><strong id="statBalance">0 ₸</strong><em>Деньги сейчас</em></div>
+  <div class="stat"><div class="label">Обязательные платежи</div><strong id="statBills">0 ₸</strong><em>Нужно сохранить</em></div>
+  <div class="stat"><div class="label">Цель накопления</div><strong id="statSavings">0 ₸</strong><em>Резерв на будущее</em></div>
+ </div>
+ <div class="grid">
+  <div class="card"><div class="cardhead"><h3>Последние расходы</h3><button class="btn soft small" onclick="go('expenses')">Все расходы →</button></div><div class="activity" id="recentExpenses"><div class="empty">Пока расходов нет</div></div></div>
+  <div class="card"><div class="cardhead"><h3>Твоя финансовая цель</h3><button class="btn soft small" onclick="go('goals')">Изменить</button></div><div id="homeGoal" class="empty">Добавь цель накопления</div></div>
+ </div>
+</section>
+
+<section class="page" id="expenses">
+ <div class="grid">
+  <div class="card">
+   <div class="cardhead"><h3>Добавить расход</h3><span class="pill">Быстрая запись</span></div>
+   <form id="expenseForm">
+    <div class="field"><label>На что потратил?</label><input id="expName" placeholder="Например, обед" required maxlength="45"></div>
+    <div class="formgrid">
+     <div class="field"><label>Сумма (₸)</label><input id="expAmount" type="number" min="1" step="1" placeholder="1500" required></div>
+     <div class="field"><label>Категория</label><select id="expCategory"><option>Еда</option><option>Транспорт</option><option>Учёба</option><option>Развлечения</option><option>Покупки</option><option>Другое</option></select></div>
+    </div>
+    <button class="btn" type="submit">Сохранить расход</button>
+   </form>
+   <div class="hint" style="margin-top:15px">Расходы сохраняются только в этом браузере на твоём устройстве. Их можно удалить в списке.</div>
+  </div>
+  <div class="card"><div class="cardhead"><h3>Расходы сегодня</h3></div><div class="amount" style="font-size:34px" id="expenseTotal">0 ₸</div><p class="smalltext">Сумма всех записанных расходов за сегодня.</p><div class="progress"><span id="expenseBar"></span></div><p class="smalltext" id="expenseRemaining">Добавь расход, чтобы увидеть остаток лимита.</p></div>
+ </div>
+ <div class="card" style="margin-top:18px"><div class="cardhead"><h3>История расходов</h3><button class="btn outline small" onclick="clearExpenses()">Очистить историю</button></div><div class="tablewrap"><table><thead><tr><th>ПОКУПКА</th><th>КАТЕГОРИЯ</th><th>ДАТА</th><th>СУММА</th><th></th></tr></thead><tbody id="expenseTable"><tr><td colspan="5" class="empty">Расходов пока нет</td></tr></tbody></table></div></div>
+</section>
+
+<section class="page" id="goals">
+ <div class="grid">
+  <div class="card"><div class="cardhead"><h3>Создать цель</h3></div>
+   <form id="goalForm"><div class="field"><label>Название цели</label><input id="goalName" placeholder="Например, новые наушники" required maxlength="45"></div>
+    <div class="formgrid"><div class="field"><label>Нужно накопить (₸)</label><input id="goalTarget" type="number" min="1" placeholder="30000" required></div><div class="field"><label>Уже накоплено (₸)</label><input id="goalCurrent" type="number" min="0" placeholder="5000" value="0"></div></div>
+    <button class="btn">Сохранить цель</button></form>
+  </div>
+  <div class="card"><div class="cardhead"><h3>Как работает цель?</h3></div><p class="muted" style="font-size:13px">Укажи сумму, которую хочешь накопить. Прогресс будет обновляться, когда ты меняешь сумму накоплений. В главном расчёте учитывается сумма, которую ты планируешь отложить.</p><div class="tip"><b>Маленький шаг — тоже прогресс</b>Разбей большую цель на небольшие суммы, которые удобно откладывать регулярно.</div></div>
+ </div>
+ <div class="card" style="margin-top:18px"><div class="cardhead"><h3>Мои цели</h3></div><div id="goalsList" class="empty">Целей пока нет</div></div>
+</section>
+
+<section class="page" id="insights">
+ <div class="statrow"><div class="stat"><div class="label">Всего записано</div><strong id="insTotal">0 ₸</strong><em>Все расходы</em></div><div class="stat"><div class="label">Количество операций</div><strong id="insCount">0</strong><em>Записей</em></div><div class="stat"><div class="label">Средний расход</div><strong id="insAverage">0 ₸</strong><em>На одну запись</em></div></div>
+ <div class="grid"><div class="card"><div class="cardhead"><h3>Расходы по категориям</h3></div><div class="barlist" id="categoryBars"><div class="empty">Добавь расходы для аналитики</div></div></div><div class="card"><div class="cardhead"><h3>Распределение бюджета</h3></div><div class="activity" id="budgetBreakdown"></div></div></div>
+ <div class="card" style="margin-top:18px"><div class="cardhead"><h3>Полезно знать</h3></div><p class="muted" style="font-size:13px">Аналитика строится на расходах, которые ты сам добавил в приложение. Это простой учёт, а не подключение к банковскому счёту. Данные могут отличаться от фактического баланса, если не записывать каждую операцию.</p></div>
+</section>
+
+<section class="page" id="settings">
+ <div class="grid">
+  <div class="card"><div class="cardhead"><h3>Параметры бюджета</h3><span class="pill">Основные данные</span></div>
+   <form id="budgetForm">
+    <div class="field"><label>Текущий баланс (₸)</label><input id="balance" type="number" min="0" step="1" placeholder="Например, 85000" required></div>
+    <div class="field"><label>Обязательные платежи до следующего дохода (₸)</label><input id="bills" type="number" min="0" step="1" placeholder="Например, 15000" required></div>
+    <div class="field"><label>Сколько хочешь отложить (₸)</label><input id="saving" type="number" min="0" step="1" placeholder="Например, 10000" required></div>
+    <div class="field"><label>Дней до зарплаты / стипендии</label><input id="days" type="number" min="1" max="365" step="1" placeholder="Например, 14" required></div>
+    <button class="btn">Сохранить и рассчитать</button>
+   </form>
+  </div>
+  <div class="card"><div class="cardhead"><h3>Режим экономии</h3><span class="pill">Дополнительная функция</span></div><p class="muted" style="font-size:13px">В режиме экономии дневной лимит уменьшается на выбранный процент, а разница остаётся в резерве.</p><div class="field"><label>Сократить дневной лимит на</label><select id="savingMode"><option value="0">Выключен</option><option value="10">10%</option><option value="15">15%</option><option value="20">20%</option><option value="25">25%</option></select></div><div class="tip"><b>Пример</b>Если обычный лимит 2 000 ₸, режим экономии 10% даст ориентир 1 800 ₸ в день.</div></div>
+ </div>
+ <div class="card" style="margin-top:18px"><div class="cardhead"><h3>Данные и приватность</h3></div><p class="muted" style="font-size:13px">Все данные хранятся локально в памяти браузера (localStorage). Приложение не подключается к банку и не отправляет твои финансовые данные на сервер.</p><button class="btn danger small" onclick="resetAll()">Сбросить все данные</button></div>
+</section>
+</main>
+</div>
+<nav class="mobilebar">
+ <button class="active" data-page="home"><span>⌂</span>Обзор</button><button data-page="expenses"><span>↗</span>Расходы</button><button data-page="goals"><span>◎</span>Цели</button><button data-page="insights"><span>▥</span>Аналитика</button><button data-page="settings"><span>⚙</span>Настройки</button>
+</nav>
+<div class="toast" id="toast"></div>
+<script>
+const KEY='limitToday_v1';
+const defaults={balance:0,bills:0,saving:0,days:1,mode:0,expenses:[],goals:[]};
+let data={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')};
+const $=id=>document.getElementById(id);
+const money=n=>Math.round(Number(n)||0).toLocaleString('ru-RU')+' ₸';
+const todayKey=()=>new Date().toLocaleDateString('en-CA');
+const dateLabel=s=>new Date(s+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'short'});
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function toast(s){let t=$('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function calc(){let raw=Math.max(0,Number(data.balance)-Number(data.bills)-Number(data.saving));let base=raw/Math.max(1,Number(data.days));return {raw,base,limit:base*(1-Number(data.mode)/100)}}
+function todayExpenses(){return data.expenses.filter(x=>x.date===todayKey()).reduce((a,x)=>a+x.amount,0)}
+function render(){
+ let c=calc(),spent=todayExpenses(),remaining=c.limit-spent;
+ $('dailyLimit').textContent=money(c.limit);$('daysLeft').textContent=data.days;$('available').textContent=money(c.raw);$('spentToday').textContent=money(spent);
+ $('limitMessage').textContent=c.raw<=0?'После резервов свободных денег не осталось. Проверь введённые суммы.':remaining<0?'Сегодняшние расходы превысили ориентир. Постарайся сократить траты в следующие дни.':'Это ориентир на день после обязательных платежей и накоплений.';
+ $('statBalance').textContent=money(data.balance);$('statBills').textContent=money(data.bills);$('statSavings').textContent=money(data.saving);
+ let pct=c.limit>0?Math.min(100,spent/c.limit*100):0;$('progressPct').textContent=Math.round(pct)+'%';$('progressSpent').textContent=money(spent);$('progressBar').style.width=pct+'%';$('progressNote').textContent=remaining>=0?'До конца дневного лимита осталось '+money(remaining):'Превышение дневного ориентира: '+money(-remaining);
+ $('dailyTip').textContent=c.raw<=0?'Сумма обязательных платежей и накоплений равна или превышает баланс. Пересмотри план.':pct>=100?'Лимит на сегодня использован. Если покупка не срочная, подумай, можно ли перенести её.':data.mode>0?'Режим экономии включён: твой ориентир уменьшен на '+data.mode+'%.':'Старайся записывать расходы сразу — так лимит будет точнее.';
+ $('expenseTotal').textContent=money(spent);$('expenseBar').style.width=pct+'%';$('expenseRemaining').textContent=remaining>=0?'Осталось по лимиту: '+money(remaining):'Превышение ориентира: '+money(-remaining);
+ let recent=[...data.expenses].slice().reverse().slice(0,4);$('recentExpenses').innerHTML=recent.length?recent.map(expRow).join(''):'<div class="empty">Пока расходов нет</div>';
+ $('expenseTable').innerHTML=data.expenses.length?[...data.expenses].reverse().map(x=>`<tr><td><b>${esc(x.name)}</b></td><td>${esc(x.cat)}</td><td>${dateLabel(x.date)}</td><td><b>${money(x.amount)}</b></td><td><button class="btn danger small" onclick="removeExpense('${x.id}')">Удалить</button></td></tr>`).join(''):'<tr><td colspan="5" class="empty">Расходов пока нет</td></tr>';
+ $('goalsList').innerHTML=data.goals.length?data.goals.map(goalHtml).join(''):'<div class="empty">Целей пока нет</div>';
+ let g=data.goals[0];$('homeGoal').innerHTML=g?`<div style="font-size:14px;font-weight:700;margin-bottom:12px">${esc(g.name)}</div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px"><span>${money(g.current)} накоплено</span><b>${Math.min(100,Math.round(g.current/g.target*100))}%</b></div><div class="progress"><span style="width:${Math.min(100,g.current/g.target*100)}%"></span></div><div class="smalltext" style="margin-top:9px">Цель: ${money(g.target)}</div>`:'<div class="empty">Добавь цель накопления</div>';
+ let total=data.expenses.reduce((a,x)=>a+x.amount,0);$('insTotal').textContent=money(total);$('insCount').textContent=data.expenses.length;$('insAverage').textContent=money(data.expenses.length?total/data.expenses.length:0);
+ let cats={};data.expenses.forEach(x=>cats[x.cat]=(cats[x.cat]||0)+x.amount);let entries=Object.entries(cats).sort((a,b)=>b[1]-a[1]);$('categoryBars').innerHTML=entries.length?entries.map(([k,v])=>`<div class="barline"><span>${esc(k)}</span><div class="bartrack"><span style="width:${v/Math.max(...entries.map(e=>e[1]))*100}%"></span></div><b style="text-align:right">${money(v)}</b></div>`).join(''):'<div class="empty">Добавь расходы для аналитики</div>';
+ $('budgetBreakdown').innerHTML=[['Обязательные платежи',data.bills],['Накопления',data.saving],['Свободный остаток',c.raw]].map(([k,v])=>`<div class="activityrow"><div class="desc"><b>${k}</b></div><strong>${money(v)}</strong></div>`).join('');
+}
+function expRow(x){return `<div class="activityrow"><div class="dot">↗</div><div class="desc"><b>${esc(x.name)}</b><small>${esc(x.cat)} · ${dateLabel(x.date)}</small></div><strong>−${money(x.amount)}</strong></div>`}
+function goalHtml(g){let p=Math.min(100,Math.round(g.current/g.target*100));return `<div class="goal"><div class="goalhead"><b>${esc(g.name)}</b><strong>${money(g.current)} / ${money(g.target)}</strong></div><div class="progress"><span style="width:${p}%"></span></div><div class="goalfoot"><span>${p}% накоплено</span><span><button class="btn soft small" onclick="addToGoal('${g.id}')">+ Пополнить</button> <button class="btn danger small" onclick="removeGoal('${g.id}')">Удалить</button></span></div></div>`}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function go(page){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===page));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===page));let titles={home:'Обзор',expenses:'Расходы',goals:'Цели накопления',insights:'Аналитика',settings:'Настройки'};$('pageTitle').textContent=titles[page];window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
+$('budgetForm').addEventListener('submit',e=>{e.preventDefault();data.balance=+$('balance').value;data.bills=+$('bills').value;data.saving=+$('saving').value;data.days=+$('days').value;save();toast('Бюджет сохранён')});
+$('savingMode').addEventListener('change',e=>{data.mode=+e.target.value;save();toast('Режим обновлён')});
+$('expenseForm').addEventListener('submit',e=>{e.preventDefault();data.expenses.push({id:Date.now().toString(),name:$('expName').value.trim(),amount:+$('expAmount').value,cat:$('expCategory').value,date:todayKey()});e.target.reset();save();toast('Расход добавлен')});
+$('goalForm').addEventListener('submit',e=>{e.preventDefault();data.goals.push({id:Date.now().toString(),name:$('goalName').value.trim(),target:+$('goalTarget').value,current:+$('goalCurrent').value||0});e.target.reset();save();toast('Цель сохранена')});
+function removeExpense(id){data.expenses=data.expenses.filter(x=>x.id!==id);save();toast('Расход удалён')}
+function clearExpenses(){if(confirm('Удалить всю историю расходов?')){data.expenses=[];save();toast('История очищена')}}
+function removeGoal(id){data.goals=data.goals.filter(x=>x.id!==id);save();toast('Цель удалена')}
+function addToGoal(id){let g=data.goals.find(x=>x.id===id);let n=prompt('Сколько добавить к накоплениям? (₸)');if(n!==null&&Number(n)>0){g.current=Math.min(g.target,g.current+Number(n));save();toast('Цель обновлена')}}
+function resetAll(){if(confirm('Точно сбросить все данные? Это действие нельзя отменить.')){data={...defaults,expenses:[],goals:[]};save();$('budgetForm').reset();$('savingMode').value='0';toast('Данные сброшены')}}
+function init(){let d=new Date();$('today').textContent=d.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});$('balance').value=data.balance;$('bills').value=data.bills;$('saving').value=data.saving;$('days').value=data.days;$('savingMode').value=String(data.mode);render()}
+init();
+</script>
+</body>
+</html>
